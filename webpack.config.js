@@ -2,10 +2,16 @@ const path = require('path')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const autoprefixer = require('autoprefixer')
 const TerserPlugin = require('terser-webpack-plugin')
+const {TsConfigPathsPlugin} = require('awesome-typescript-loader')
 const cssnano = require('cssnano')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
+
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+    plugins: [ new TsConfigPathsPlugin() ]
+  },
 
   output: {
     filename: 'bundle.js',
@@ -14,7 +20,8 @@ module.exports = {
 
   module: {
     rules: [
-      {
+      { test: /\.tsx?$/, use: 'awesome-typescript-loader'},
+      /* {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
@@ -23,7 +30,7 @@ module.exports = {
             presets: ['env', 'stage-0']
           }
         }
-      },
+      }, */
       {
         test: /\.scss$/,
         use: [
@@ -69,7 +76,7 @@ module.exports = {
     })
   ],
   
-  optimization: {
+  /* optimization: {
     minimizer: [
       new TerserPlugin({
         test: /\.m?js(\?.*)?$/i,
@@ -79,7 +86,7 @@ module.exports = {
         sourceMap: true
       })
     ]
-  },
+  }, */
 
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
